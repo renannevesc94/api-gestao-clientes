@@ -12,12 +12,12 @@ const getClients = async (req, resp) => {
 
 const getClientbyCnpj = async (req, resp) => {
     const cnpj = req.params.cnpj
-    if(!cnpj || cnpj.length < 14){
-      return resp.status(400).json({message: 'CNPJ Inválido'})
+    if (!cnpj || cnpj.length < 14) {
+        return resp.status(400).json({ message: 'CNPJ Inválido' })
     }
     try {
         const cliente = await clientService.getClientByCnpjService(cnpj)
-        return resp.status(200).json({ cliente, message: 'ok'});
+        return resp.status(200).json({ cliente, message: 'ok' });
 
     } catch (error) {
         return resp.status(error.status).json({ message: error.message });
@@ -63,7 +63,10 @@ const deleteClient = async (req, resp) => {
 
 const updateStatusClient = async (req, resp) => {
     const cnpj = req.params.cnpj;
-    const status = req.body.situacao;
+    const status = req.body.status;
+    if (!cnpj || cnpj.length < 14 || status.length < 8) {
+        return resp.status(400).json({ message: 'Informaçõe incorretas' })
+    }
 
     try {
         await clientService.updateStatusClientService(cnpj, status)

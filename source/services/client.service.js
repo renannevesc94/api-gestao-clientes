@@ -57,7 +57,7 @@ const deleteClientService = async (cnpj) => {
 const updateStatusClientService = async (cnpj, status) => {
     const cliente = await Client.findOne({ cnpj: cnpj })
     if (!cliente) {
-        throw new Error('Falha na atualização do Cliente');
+        throw new Error('Cliente não localizado');
     }
 
     try {
