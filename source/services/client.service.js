@@ -70,6 +70,18 @@ const updateStatusClientService = async (cnpj, status) => {
     }
 }
 
+const getStatusClientService = async (cnpj) => {
+    try {
+        const cliente = await Client.findOne({cnpj: cnpj})
+        if (!cliente) {
+            throw { message: 'Cliente Não Localizado Na Base de Dados', status: 400 }
+        } 
+       
+        return({status:cliente.situacao, alerta:cliente.alerta})
+    } catch (error) {
+
+    }
+}
 
 
 export default {
@@ -77,6 +89,7 @@ export default {
     insertClientService,
     deleteClientService,
     getClientByCnpjService,
+    getStatusClientService,
     updateStatusClientService
 }
 

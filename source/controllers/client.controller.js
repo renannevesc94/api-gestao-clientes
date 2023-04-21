@@ -76,10 +76,25 @@ const updateStatusClient = async (req, resp) => {
     }
 }
 
+const getStatusCli = async (req, resp) => {
+    const cnpj = req.params.cnpj;
+    if(!cnpj || cnpj.length < 14){
+        return resp.status(400).json({message:'CNPJ informado está incorreto'})
+    }
+
+    try {
+      const status = await clientService.getStatusClientService(cnpj)
+      return resp.status(200).json(status)
+    } catch (error) {
+        
+    }
+}
+
 export default {
     getClients,
     insertClient,
     deleteClient,
     getClientbyCnpj,
+    getStatusCli,
     updateStatusClient
 }

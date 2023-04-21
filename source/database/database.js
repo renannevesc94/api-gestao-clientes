@@ -3,15 +3,16 @@ import mongoose from 'mongoose';
 
 const dataBase = () => {
 
-mongoose.connect(
-    process.env.MONGO_URL
-).then(() => {
-    console.log('BD Conectado!')
-}).catch((error) => {
-    console.log('Falha na conexão ao BD.')
-})
+    mongoose.connect(
+        `mongodb+srv://renanepd:${process.env.DB_SENHA}@cluster0.r7lo0b2.mongodb.net/GESTAO_CLIENTES`,
+        {useNewUrlParser: true, useUnifiedTopology: true}
+    ).then(() => {
+        console.log('BD Conectado!')
+    }).catch((error) => {
+        console.log('Falha na conexão ao BD.')
+    })
 };
 
-export default{
+export default {
     dataBase
 }

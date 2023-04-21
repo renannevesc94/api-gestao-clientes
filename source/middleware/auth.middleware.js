@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const validarToken = (req, resp, next) => {
+export const validarToken = (req, resp, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader 
 
@@ -21,6 +21,3 @@ const validarToken = (req, resp, next) => {
     }
 }
 
-export default{
-    validarToken
-}
