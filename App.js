@@ -4,13 +4,14 @@ import express from 'express';
 import cors from 'cors';
 import conectDatabase from './source/database/database.js';
 
-const port = process.env.PORT || 3000
 
 //IMPORT DAS ROUTES 
 import authRoute from './source/routes/auth.route.js';
 import clientRoute from './source/routes/client.route.js';
  
 dontenv.config()
+
+const port = process.env.port || 3000
 const app = express();
 app.use(cors());
 
@@ -27,5 +28,6 @@ app.use("/login", authRoute.route);
 app.use("/clientes", clientRoute.route);
 
 conectDatabase.dataBase();
+console.log(port)
 app.listen(port);
 
