@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import conectDatabase from './source/database/database.js';
 
+const port = process.env.PORT || 3000
 
 //IMPORT DAS ROUTES 
 import authRoute from './source/routes/auth.route.js';
@@ -26,5 +27,5 @@ app.use("/login", authRoute.route);
 app.use("/clientes", clientRoute.route);
 
 conectDatabase.dataBase();
-app.listen(10000);
+app.listen(port);
 
