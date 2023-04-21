@@ -16,7 +16,7 @@ const validarToken = (req, resp, next) => {
         jwt.verify(token, secret)
         next();
     } catch (error) {
-        resp.status(500).json({ message: 'Falha na requisição' });
+        resp.status(500).json({ message: 'Falha na requisição Acesso Não Permitido' });
 
     }
 }

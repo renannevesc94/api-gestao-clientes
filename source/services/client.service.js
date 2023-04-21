@@ -13,11 +13,29 @@ const getClientesService = async () => {
     }
 };
 
-const insertClientService = async (cliente) => {
+const getClientByCnpjService = async (cnpj) => {
     try {
-        return await Client.create(cliente)
+        const cliente = await Client.findOne({ cnpj: cnpj })
+        if (!cliente) {
+            throw { message: 'Cliente não localizado', status: 404 }
+        }
+        return cliente
     } catch (error) {
-        throw { status: 500, message: 'Usuário Já Cadastrado' }
+        throw { message: 'Falha na busca do cliente', status: 500 }
+    }
+}
+
+const insertClientService = async (cliente) => {
+
+    try {
+        const findCli = await Client.findOne({ cnpj: cliente.cnpj })
+        if (findCli) {
+            throw new Error('Cliente Já Cadastrado')
+        }
+        return await Client.create(cliente)
+
+    } catch (error) {
+        throw { status: 500, message: error.message }
 
     }
 
@@ -36,19 +54,19 @@ const deleteClientService = async (cnpj) => {
     }
 }
 
-const updateStatusClientService= async (cnpj, status) => {
-    const cliente = await Client.findOne({cnpj:cnpj})
-    if(!cliente){
-      throw new Error('Falha na atualização do Cliente');
+const updateStatusClientService = async (cnpj, status) => {
+    const cliente = await Client.findOne({ cnpj: cnpj })
+    if (!cliente) {
+        throw new Error('Falha na atualização do Cliente');
     }
 
     try {
-            cliente.situacao = status
-            await cliente.save()
-        }  
-       
+        cliente.situacao = status
+        await cliente.save()
+    }
+
     catch (error) {
-        throw {status: 500, message: error.message}
+        throw { status: 500, message: error.message }
     }
 }
 
@@ -58,6 +76,7 @@ module.exports = {
     getClientesService,
     insertClientService,
     deleteClientService,
+    getClientByCnpjService,
     updateStatusClientService
 }
 

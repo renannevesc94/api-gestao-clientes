@@ -1,15 +1,26 @@
 const clientService = require('../services/client.service');
-const autenticarUsuario = require('../middleware/auth.middleware');
 
 
 const getClients = async (req, resp) => {
-    
-    
     try {
         const clientes = await clientService.getClientesService();
         resp.status(200).json(clientes);
     } catch (error) {
         resp.status(500).json({ message: error });
+    }
+}
+
+const getClientbyCnpj = async (req, resp) => {
+    const cnpj = req.params.cnpj
+    if(!cnpj || cnpj.length < 14){
+      return resp.status(400).json({message: 'CNPJ Inválido'})
+    }
+    try {
+        const cliente = await clientService.getClientByCnpjService(cnpj)
+        return resp.status(200).json({ cliente, message: 'ok'});
+
+    } catch (error) {
+        return resp.status(error.status).json({ message: error.message });
     }
 }
 
@@ -30,7 +41,7 @@ const insertClient = async (req, resp) => {
 
     try {
         await clientService.insertClientService(cliente)
-        return resp.status(200).json({ message: 'Cliente Cadastrado com sucesso!' })
+        return resp.status(201).json({ message: 'Cliente Cadastrado com sucesso!' })
     } catch (error) {
         return resp.status(error.status).json({ message: error.message })
     }
@@ -53,12 +64,12 @@ const deleteClient = async (req, resp) => {
 const updateStatusClient = async (req, resp) => {
     const cnpj = req.params.cnpj;
     const status = req.body.situacao;
-   
+
     try {
         await clientService.updateStatusClientService(cnpj, status)
-        return resp.status(201).json({message: 'Status do cliente atualizado'})
+        return resp.status(201).json({ message: 'Status do cliente atualizado' })
     } catch (error) {
-        return resp.status(500).json({message: error.message})
+        return resp.status(500).json({ message: error.message })
     }
 }
 
@@ -66,5 +77,6 @@ module.exports = {
     getClients,
     insertClient,
     deleteClient,
+    getClientbyCnpj,
     updateStatusClient
 }
