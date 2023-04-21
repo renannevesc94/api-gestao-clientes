@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import validarCnpj from './verificaCnpj.middleware.js'
+import {validaCnpj} from './verificaCnpj.middleware.js'
 
 //criando o SCHEMA "modelo de dados para o módulo"
 
@@ -9,7 +9,7 @@ const schemaCliente = new mongoose.Schema({
         required: true,
         unique: true,
         validate: {
-            validator: validarCnpj.validarCnpj,
+            validator: validaCnpj,
             message: 'CNPJ Inválido',
         }
     },
