@@ -1,14 +1,14 @@
 const jwt = require('jsonwebtoken');
 
-
-
 const validarToken = (req, resp, next) => {
-    console.log('vim validar o token')
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    
-    if(!token){
-         resp.status(401).json({message: 'Token de acesso não fornecido'});
+    const token = authHeader 
+
+    //Na chamada por JS precisa dessa linha separar o token quem vem com o bearer
+    //authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        resp.status(401).json({ message: 'Token de acesso não fornecido' });
     }
 
     try {
@@ -16,8 +16,8 @@ const validarToken = (req, resp, next) => {
         jwt.verify(token, secret)
         next();
     } catch (error) {
-         resp.status(500).json({message: 'Falha na requisição'});
-        
+        resp.status(500).json({ message: 'Falha na requisição' });
+
     }
 }
 
