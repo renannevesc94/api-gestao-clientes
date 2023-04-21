@@ -12,7 +12,7 @@ const login = async (req, resp) => {
     }
 
     const token = jwt.sign({payload: usuario._id}, process.env.SECRET, {expiresIn: '1h'});
-    return resp.status(200).json({message: 'Login efetuado', token});
+    return resp.status(200).json({message: 'Login Efetuado', token});
 }
 
 module.exports = {

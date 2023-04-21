@@ -4,7 +4,6 @@ const autenticarUsuario = require('../middleware/auth.middleware');
 
 const getClients = async (req, resp) => {
     
-    autenticarUsuario.validarToken()
     
     try {
         const clientes = await clientService.getClientesService();
