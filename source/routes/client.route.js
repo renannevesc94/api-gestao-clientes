@@ -1,6 +1,7 @@
-const route = require('express').Router();
-const clientControler = require('../controllers/client.controller');
-const authMiddleware = require('../middleware/auth.middleware');
+import {Router} from 'express';
+const route = Router()
+import clientControler from '../controllers/client.controller.js'
+import authMiddleware from'../middleware/auth.middleware.js';
 
 
 route.get('/', authMiddleware.validarToken ,clientControler.getClients );
@@ -9,6 +10,6 @@ route.post('/', authMiddleware.validarToken ,clientControler.insertClient);
 route.delete('/:cnpj', authMiddleware.validarToken, clientControler.deleteClient);
 route.patch('/:cnpj', authMiddleware.validarToken, clientControler.updateStatusClient)
 
-module.exports = {
+export default {
     route
 }

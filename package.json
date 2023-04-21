@@ -1,13 +1,15 @@
 {
-  "name": "api_rest",
+  "name": "api_gestao-clientes",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
-  "main": "index.js",
+  "main": "App.js",
   "scripts": {
-    "start": "nodemon ./App.js localhost 3000"
+    "start": "node App",
+    "dev" : "nodemon App"
   },
   "keywords": [],
-  "author": "",
+  "author": "GitHub:@renannevesc94",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -15,7 +17,9 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.3",
+    "mongoose": "^7.0.3"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.22"
   }
 }

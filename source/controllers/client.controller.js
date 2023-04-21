@@ -1,4 +1,4 @@
-const clientService = require('../services/client.service');
+import clientService from '../services/client.service.js';
 
 
 const getClients = async (req, resp) => {
@@ -76,7 +76,7 @@ const updateStatusClient = async (req, resp) => {
     }
 }
 
-module.exports = {
+export default {
     getClients,
     insertClient,
     deleteClient,

@@ -1,4 +1,4 @@
-const Client = require('../models/Client');
+import Client from '../models/Client.js';
 
 
 const getClientesService = async () => {
@@ -72,7 +72,7 @@ const updateStatusClientService = async (cnpj, status) => {
 
 
 
-module.exports = {
+export default {
     getClientesService,
     insertClientService,
     deleteClientService,

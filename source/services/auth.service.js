@@ -1,10 +1,8 @@
-const User = require('../models/User');
+import User from '../models/User.js';
 
 const login = (user, password) => User.findOne({userName:user, senhaUser: password}).select('-senhaUser');
   
-   
 
-
-module.exports = {
+export default {
     login
 }

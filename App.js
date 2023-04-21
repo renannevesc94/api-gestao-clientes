@@ -1,15 +1,15 @@
 //IMPORTS DE CONFIGURAÇÃO E BD
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const conectDatabase = require('./source/database/database');
+import dontenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import conectDatabase from './source/database/database.js';
+
 
 //IMPORT DAS ROUTES 
-const userRoute = require('./source/routes/user.route');
-const authRoute = require('./source/routes/auth.route');
-const clientRoute = require('./source/routes/client.route');
-
-
+import authRoute from './source/routes/auth.route.js';
+import clientRoute from './source/routes/client.route.js';
+ 
+dontenv.config()
 const app = express();
 app.use(cors());
 

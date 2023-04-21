@@ -46,6 +46,6 @@ function validarCnpj(cnpj) {
     return true;
 }
 
-module.exports = {
+export default {
     validarCnpj
 }

@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const validarCnpj = require('./verificaCnpj.middleware')
+import mongoose from 'mongoose';
+import validarCnpj from './verificaCnpj.middleware.js'
 
 //criando o SCHEMA "modelo de dados para o módulo"
 
@@ -23,4 +23,4 @@ const schemaCliente = new mongoose.Schema({
 
 const Client = mongoose.model('Cliente', schemaCliente);
 
-module.exports = Client
+export default Client
