@@ -21,7 +21,7 @@ const getClientByCnpjService = async (cnpj) => {
         }
         return cliente
     } catch (error) {
-        throw { message: 'Falha na busca do cliente', status: 500 }
+        throw { message: error.message, status: error.status }
     }
 }
 
@@ -79,7 +79,7 @@ const getStatusClientService = async (cnpj) => {
        
         return({status:cliente.situacao, alerta:cliente.alerta})
     } catch (error) {
-
+        throw { message: error.message, status: error.status }
     }
 }
 

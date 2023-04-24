@@ -86,7 +86,7 @@ const getStatusCli = async (req, resp) => {
       const status = await clientService.getStatusClientService(cnpj)
       return resp.status(200).json(status)
     } catch (error) {
-        
+      return resp.status(error.status).json({message: error.message})
     }
 }
 
