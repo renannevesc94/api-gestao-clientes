@@ -1,9 +1,9 @@
 import Client from '../models/Client.js';
 
 
-const getAllClientsService = async () => {
+const getAllClientsService = async (limite, inicio) => {
     try {
-        const clientes = await Client.find({})
+        const clientes = await Client.find({}).skip(inicio).limit(limite)
         if (!clientes) {
             throw new Error('Falha ao carregar os clietes do DB')
         }
@@ -78,6 +78,7 @@ const getStatusClientService = async (cnpj) => {
     }
 }
 
+const contarClientes = () =>Client.countDocuments();
 
 export default {
     getAllClientsService,
@@ -85,7 +86,8 @@ export default {
     deleteClientService,
     getClientByCnpjService,
     getStatusClientService,
-    updateStatusClientService
+    updateStatusClientService,
+    contarClientes
 }
 
 
