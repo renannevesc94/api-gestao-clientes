@@ -4,7 +4,7 @@ import clientControler from '../controllers/client.controller.js'
 import {validarToken} from'../middleware/auth.middleware.js';
 
 
-route.get('/', validarToken ,clientControler.getClients );
+route.get('/', validarToken ,clientControler.getAllClients );
 route.get('/:cnpj', validarToken, clientControler.getClientbyCnpj);
 route.get('/status/:cnpj', clientControler.getStatusCli);
 route.post('/', validarToken ,clientControler.insertClient);
