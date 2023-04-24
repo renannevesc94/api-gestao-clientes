@@ -1,4 +1,5 @@
 import clientService from '../services/client.service.js';
+import { validaCnpj } from '../middleware/utils.middleware.js';
 
 
 const getClients = async (req, resp) => {
@@ -11,11 +12,11 @@ const getClients = async (req, resp) => {
 }
 
 const getClientbyCnpj = async (req, resp) => {
-    const cnpj = req.params.cnpj
-    if (!cnpj || cnpj.length < 14) {
-        return resp.status(400).json({ message: 'CNPJ Inválido' })
-    }
+
     try {
+        const cnpj = req.params.cnpj;
+        if (!validaCnpj(cnpj))
+            return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
         const cliente = await clientService.getClientByCnpjService(cnpj)
         return resp.status(200).json({ cliente, message: 'ok' });
 
@@ -50,25 +51,23 @@ const insertClient = async (req, resp) => {
 }
 
 const deleteClient = async (req, resp) => {
-    const cliCnpj = req.params.cnpj
-
     try {
-        await clientService.deleteClientService(cliCnpj);
+        const cnpj = req.params.cnpj;
+        if (!validaCnpj(cnpj))
+            return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
+        await clientService.deleteClientService(cnpj);
         return resp.status(200).json({ message: 'Cliente apagado com sucesso' })
     } catch (error) {
         return resp.status(500).json({ message: error.message })
     }
-
 }
 
 const updateStatusClient = async (req, resp) => {
-    const cnpj = req.params.cnpj;
-    const status = req.body.status;
-    if (!cnpj || cnpj.length < 14 || status.length < 8) {
-        return resp.status(400).json({ message: 'Informaçõe incorretas' })
-    }
-
     try {
+        const cnpj = req.params.cnpj;
+        const status = req.body.status;
+        if (!validaCnpj(cnpj))
+            return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
         await clientService.updateStatusClientService(cnpj, status)
         return resp.status(201).json({ message: 'Status do cliente atualizado' })
     } catch (error) {
@@ -77,16 +76,14 @@ const updateStatusClient = async (req, resp) => {
 }
 
 const getStatusCli = async (req, resp) => {
-    const cnpj = req.params.cnpj;
-    if(!cnpj || cnpj.length < 14){
-        return resp.status(400).json({message:'CNPJ informado está incorreto'})
-    }
-
     try {
-      const status = await clientService.getStatusClientService(cnpj)
-      return resp.status(200).json(status)
+        const cnpj = req.params.cnpj;
+        if (!validaCnpj(cnpj))
+            return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
+        const status = await clientService.getStatusClientService(cnpj)
+        return resp.status(200).json(status)
     } catch (error) {
-      return resp.status(error.status).json({message: error.message})
+        return resp.status(error.status).json({ message: error.message })
     }
 }
 

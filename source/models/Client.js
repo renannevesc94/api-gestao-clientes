@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {validaCnpj} from './verificaCnpj.middleware.js'
+import {validaCnpj} from '../middleware/utils.middleware.js'
 
 //criando o SCHEMA "modelo de dados para o módulo"
 
