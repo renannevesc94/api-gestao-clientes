@@ -17,7 +17,6 @@ const login = async (req, resp) => {
         return resp.status(500).json({message: 'Falha ao gerar token de acesso'})
     }
 }
-
 export default {
     login
 }
