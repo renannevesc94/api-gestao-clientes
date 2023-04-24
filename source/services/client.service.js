@@ -14,15 +14,12 @@ const getClientesService = async () => {
 };
 
 const getClientByCnpjService = async (cnpj) => {
-    try {
         const cliente = await Client.findOne({ cnpj: cnpj })
+
         if (!cliente) {
             throw { message: 'Cliente não localizado', status: 404 }
         }
-        return cliente
-    } catch (error) {
-        throw { message: error.message, status: error.status }
-    }
+        return cliente  
 }
 
 const insertClientService = async (cliente) => {
