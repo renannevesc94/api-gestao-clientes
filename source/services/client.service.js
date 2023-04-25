@@ -1,6 +1,5 @@
 import Client from '../models/Client.js';
 
-
 const getAllClientsService = async (limite, inicio) => {
     try {
         const clientes = await Client.find({}).skip(inicio).limit(limite)
