@@ -18,10 +18,10 @@ const getAllClients = async (req, resp) => {
     }
 
     const next = offset + limite; 
-    const nextUrl = next < totalClients ? `${currentUrl}?limite=${limite}&inicio=${next}`: null;
+    const nextUrl = next < totalClients ? `${currentUrl}?limite=${limite}&offset=${next}`: null;
 
     const anterior = offset - limite < 0 ? null : offset - limite;
-    const previousUrl = anterior != null ? `${currentUrl}?limite=${limite}&inicio=${anterior}`: null 
+    const previousUrl = anterior != null ? `${currentUrl}?limite=${limite}&offset=${anterior}`: null 
 
     try {
         const clientes = await clientService.getAllClientsService(limite, offset);

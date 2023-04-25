@@ -7,7 +7,7 @@ const dataBase = () => {
         `mongodb+srv://renanepd:${process.env.DB_SENHA}@cluster0.r7lo0b2.mongodb.net/GESTAO_CLIENTES`,
         {useNewUrlParser: true, useUnifiedTopology: true}
     ).then(() => {
-        console.log('BD Conectado!')
+        console.log('BD Conectado!' + Date.now())
     }).catch((error) => {
         console.log('Falha na conexão ao BD.')
     })
