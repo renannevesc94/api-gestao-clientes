@@ -21,7 +21,7 @@ const getAllClients = async (req, resp) => {
     const nextUrl = next < totalClients ? `${currentUrl}?limite=${limite}&inicio=${next}`: null;
 
     const anterior = inicio - limite < 0 ? null : inicio - limite;
-    const anteriorUrl = `${currentUrl}?limite=${limite}&inicio=${anterior}`
+    const anteriorUrl = anterior != null ? `${currentUrl}?limite=${limite}&inicio=${anterior}`: null 
 
     try {
         const clientes = await clientService.getAllClientsService(limite, inicio);
