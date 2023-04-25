@@ -7,7 +7,7 @@ const getAllClients = async (req, resp) => {
     const currentUrl = req.baseUrl
  
     limite = Number(limite);
-    inicio = Number(offset)
+    offset = Number(offset)
 
     if(!limite){
         limite = 5
