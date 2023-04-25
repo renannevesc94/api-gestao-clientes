@@ -1,24 +1,44 @@
 import clientService from '../services/client.service.js';
 import { validaCnpj } from '../middleware/utils.middleware.js';
 
+const getAllClients = async (req, resp) => {
+    let {limite, inicio} = req.query
+    const totalClients = await clientService.contarClientes()
+    const currentUrl = req.baseUrl
+ 
+    limite = Number(limite);
+    inicio = Number(inicio)
 
-const getClients = async (req, resp) => {
+    if(!limite){
+        limite = 2
+    }
+
+    if(!inicio){
+        inicio = 0;
+    }
+
+    const next = inicio + limite; 
+    const nextUrl = next < totalClients ? `${currentUrl}?limite=${limite}&inicio=${next}`: null;
+
+    const anterior = inicio - limite < 0 ? null : inicio - limite;
+    const anteriorUrl = anterior != null ? `${currentUrl}?limite=${limite}&inicio=${anterior}`: null 
+
     try {
-        const clientes = await clientService.getClientesService();
-        resp.status(200).json(clientes);
+        const clientes = await clientService.getAllClientsService(limite, inicio);
+        resp.status(200).json( {nextUrl, anteriorUrl, inicio, limite, 
+            results: clientes});
     } catch (error) {
         resp.status(500).json({ message: error });
     }
 }
 
 const getClientbyCnpj = async (req, resp) => {
-
     try {
         const cnpj = req.params.cnpj;
         if (!validaCnpj(cnpj))
             return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
         const cliente = await clientService.getClientByCnpjService(cnpj)
-        return resp.status(200).json({ cliente, message: 'ok' });
+        return resp.status(200).json({ cliente});
 
     } catch (error) {
         return resp.status(error.status).json({ message: error.message });
@@ -26,21 +46,21 @@ const getClientbyCnpj = async (req, resp) => {
 }
 
 const insertClient = async (req, resp) => {
-    const { cnpj, razao, telefone, contato, alerta, situacao } = req.body
-    const cliente = {
-        cnpj,
-        razao,
-        telefone,
-        contato,
-        alerta,
-        situacao
-    }
-
-    if (!cnpj || !razao || !telefone || !contato || !situacao) {
-        return resp.status(401).json({ message: 'Campo obrigatório não informado' })
-    }
 
     try {
+        const { cnpj, razao, telefone, contato, alerta, situacao } = req.body
+        const cliente = {
+            cnpj,
+            razao,
+            telefone,
+            contato,
+            alerta,
+            situacao
+        }
+
+        if (!cnpj || !razao || !telefone || !contato || !situacao) {
+            return resp.status(401).json({ message: 'Campo obrigatório não informado' })
+        }
         await clientService.insertClientService(cliente)
         return resp.status(201).json({ message: 'Cliente Cadastrado com sucesso!' })
     } catch (error) {
@@ -88,7 +108,7 @@ const getStatusCli = async (req, resp) => {
 }
 
 export default {
-    getClients,
+    getAllClients,
     insertClient,
     deleteClient,
     getClientbyCnpj,

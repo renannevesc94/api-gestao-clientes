@@ -20,7 +20,6 @@ const schemaCliente = new mongoose.Schema({
     alerta: { type: String}
 });
 
-
 const Client = mongoose.model('Cliente', schemaCliente);
 
 export default Client
