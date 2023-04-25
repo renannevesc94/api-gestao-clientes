@@ -2,30 +2,30 @@ import clientService from '../services/client.service.js';
 import { validaCnpj } from '../middleware/utils.middleware.js';
 
 const getAllClients = async (req, resp) => {
-    let {limite, inicio} = req.query
+    let {limite, offset} = req.query
     const totalClients = await clientService.contarClientes()
     const currentUrl = req.baseUrl
  
     limite = Number(limite);
-    inicio = Number(inicio)
+    inicio = Number(offset)
 
     if(!limite){
-        limite = 2
+        limite = 5
     }
 
-    if(!inicio){
-        inicio = 0;
+    if(!offset){
+        offset = 0;
     }
 
-    const next = inicio + limite; 
+    const next = offset + limite; 
     const nextUrl = next < totalClients ? `${currentUrl}?limite=${limite}&inicio=${next}`: null;
 
-    const anterior = inicio - limite < 0 ? null : inicio - limite;
-    const anteriorUrl = anterior != null ? `${currentUrl}?limite=${limite}&inicio=${anterior}`: null 
+    const anterior = offset - limite < 0 ? null : offset - limite;
+    const previousUrl = anterior != null ? `${currentUrl}?limite=${limite}&inicio=${anterior}`: null 
 
     try {
-        const clientes = await clientService.getAllClientsService(limite, inicio);
-        resp.status(200).json( {nextUrl, anteriorUrl, inicio, limite, 
+        const clientes = await clientService.getAllClientsService(limite, offset);
+        resp.status(200).json( {nextUrl, previousUrl, offset, limite, 
             results: clientes});
     } catch (error) {
         resp.status(500).json({ message: error });
