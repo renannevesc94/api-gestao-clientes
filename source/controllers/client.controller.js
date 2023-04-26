@@ -1,5 +1,6 @@
 import clientService from '../services/client.service.js';
 import { validaCnpj } from '../middleware/utils.middleware.js';
+import Client from '../models/Client.js';
 
 const getAllClients = async (req, resp) => {
     let {limite, offset} = req.query
@@ -107,11 +108,21 @@ const getStatusCli = async (req, resp) => {
     }
 }
 
+const searchClients = async (req, resp) => {
+   try {
+      const pesquisa = req.body.razao;
+      const cliente = await clientService.searchClientsService(pesquisa)
+      resp.status(200).json(cliente)
+   } catch (error) {
+        resp.status(500).json({message: 'Deu ruim em'})
+   }
+}
 export default {
     getAllClients,
     insertClient,
     deleteClient,
     getClientbyCnpj,
     getStatusCli,
-    updateStatusClient
+    updateStatusClient,
+    searchClients
 }
