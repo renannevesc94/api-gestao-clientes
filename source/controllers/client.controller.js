@@ -110,7 +110,7 @@ const getStatusCli = async (req, resp) => {
 
 const searchClients = async (req, resp) => {
    try {
-      const pesquisa = req.body.razao;
+      const pesquisa = req.query
       const cliente = await clientService.searchClientsService(pesquisa)
       resp.status(200).json(cliente)
    } catch (error) {

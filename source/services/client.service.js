@@ -80,7 +80,7 @@ const getStatusClientService = async (cnpj) => {
 const contarClientes = () =>Client.countDocuments();
 
 const searchClientsService = async (_razao)=>{
-    const razaoSocial = String(_razao)
+    const razaoSocial = _razao.razao
     return await Client.find({razao: { $regex: razaoSocial, $options: 'i' }})
 }
 
