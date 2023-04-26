@@ -5,6 +5,7 @@ import {validarToken} from'../middleware/auth.middleware.js';
 
 
 route.get('/', validarToken ,clientControler.getAllClients );
+route.get('/search',validarToken, clientControler.searchClients);
 route.get('/:cnpj', validarToken, clientControler.getClientbyCnpj);
 route.get('/status/:cnpj', clientControler.getStatusCli);
 route.post('/', validarToken ,clientControler.insertClient);
