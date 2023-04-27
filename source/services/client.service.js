@@ -1,8 +1,8 @@
 import Client from '../models/Client.js';
 
-const getAllClientsService = async (limite, inicio) => {
+const getAllClientsService = async (limite, offset) => {
     try {
-        const clientes = await Client.find({}).skip(inicio).limit(limite)
+        const clientes = await Client.find({}).skip(offset).limit(limite)
         if (!clientes) {
             throw new Error('Falha ao carregar os clietes do DB')
         }
@@ -77,11 +77,16 @@ const getStatusClientService = async (cnpj) => {
     }
 }
 
-const contarClientes = () =>Client.countDocuments();
+const contarClientes = (filtro) =>Client.countDocuments(filtro);
 
-const searchClientsService = async (_razao)=>{
-    const razaoSocial = _razao.razao
-    return await Client.find({razao: { $regex: razaoSocial, $options: 'i' }})
+const searchClientsService = async (filtro, limite, offset)=>{
+   
+    return await Client.find({
+        $or:[
+        {razao: { $regex: filtro, $options: 'i' }},
+        {cnpj: { $regex: filtro, $options: 'i' }}
+        ]
+}).skip(offset).limit(limite);
 }
 
 export default {
