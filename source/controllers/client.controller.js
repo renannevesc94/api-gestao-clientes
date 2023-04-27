@@ -1,33 +1,34 @@
 import clientService from '../services/client.service.js';
 import { validaCnpj } from '../middleware/utils.middleware.js';
-import Client from '../models/Client.js';
 
 const getAllClients = async (req, resp) => {
-    let {limite, offset} = req.query
-    const totalClients = await clientService.contarClientes()
-    const currentUrl = req.baseUrl
- 
-    limite = Number(limite);
-    offset = Number(offset)
-
-    if(!limite){
-        limite = 5
-    }
-
-    if(!offset){
-        offset = 0;
-    }
-
-    const next = offset + limite; 
-    const nextUrl = next < totalClients ? `${currentUrl}?limite=${limite}&offset=${next}`: null;
-
-    const anterior = offset - limite < 0 ? null : offset - limite;
-    const previousUrl = anterior != null ? `${currentUrl}?limite=${limite}&offset=${anterior}`: null 
-
     try {
+        let { limite, offset } = req.query
+        const totalClients = await clientService.contarClientes()
+        const currentUrl = req.baseUrl
+
+        limite = Number(limite);
+        offset = Number(offset)
+
+        if (!limite) {
+            limite = 5
+        }
+
+        if (!offset) {
+            offset = 0;
+        }
+
+        const next = offset + limite;
+        const nextUrl = next < totalClients ? `${currentUrl}?limite=${limite}&offset=${next}` : null;
+
+        const anterior = offset - limite < 0 ? null : offset - limite;
+        const previousUrl = anterior != null ? `${currentUrl}?limite=${limite}&offset=${anterior}` : null
+
         const clientes = await clientService.getAllClientsService(limite, offset);
-        resp.status(200).json( {nextUrl, previousUrl, offset, limite, 
-            results: clientes});
+        resp.status(200).json({
+            nextUrl, previousUrl, offset, limite,
+            results: clientes
+        });
     } catch (error) {
         resp.status(500).json({ message: error });
     }
@@ -39,7 +40,7 @@ const getClientbyCnpj = async (req, resp) => {
         if (!validaCnpj(cnpj))
             return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
         const cliente = await clientService.getClientByCnpjService(cnpj)
-        return resp.status(200).json({ cliente});
+        return resp.status(200).json({ cliente });
 
     } catch (error) {
         return resp.status(error.status).json({ message: error.message });
@@ -109,13 +110,47 @@ const getStatusCli = async (req, resp) => {
 }
 
 const searchClients = async (req, resp) => {
-   try {
-      const pesquisa = req.query
-      const cliente = await clientService.searchClientsService(pesquisa)
-      resp.status(200).json(cliente)
-   } catch (error) {
-        resp.status(500).json({message: 'Deu ruim em'})
-   }
+    try {
+        let { limite, offset, filtro } = req.query
+        const filtroCount  = {
+            $or:[
+            {razao: { $regex: filtro, $options: 'i' }},
+            {cnpj: { $regex: filtro, $options: 'i' }}
+            ]
+        }
+        const totalClients = await clientService.contarClientes(filtroCount)
+        const currentUrl = req.baseUrl
+        console.log('TOTAL DE CLIENTES:' + totalClients)
+
+         limite = Number(limite);
+         offset = Number(offset)
+
+        if (!limite) {
+            limite = 5
+        }
+
+        if (!offset) {
+            offset = 0;
+        }
+
+        const next = offset + limite;
+        const nextUrl = next < totalClients ? `${currentUrl}?filtro=${filtro}&limite=${limite}&offset=${next}` : null;
+
+        const anterior = offset - limite < 0 ? null : offset - limite;
+        const previousUrl = anterior != null ? `${currentUrl}?filtro=${filtro}&limite=${limite}&offset=${anterior}` : null
+
+
+        console.log(nextUrl)
+        console.log(previousUrl)
+
+        const clientes = await clientService.searchClientsService(filtro, limite, offset)
+        resp.status(200).json({
+            nextUrl, previousUrl, offset, limite,
+            results: clientes
+        });
+    } catch (error) {
+        resp.status(500).json({ message: error.message })
+    }
 }
 export default {
     getAllClients,
