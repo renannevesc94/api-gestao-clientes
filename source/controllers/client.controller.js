@@ -20,10 +20,8 @@ const getAllClients = async (req, resp) => {
 
         const next = offset + limite;
         const nextUrl = next < totalClients ? `${currentUrl}?limite=${limite}&offset=${next}` : null;
-
         const anterior = offset - limite < 0 ? null : offset - limite;
         const previousUrl = anterior != null ? `${currentUrl}?limite=${limite}&offset=${anterior}` : null
-
         const clientes = await clientService.getAllClientsService(limite, offset);
         resp.status(200).json({
             nextUrl, previousUrl, offset, limite,
@@ -112,18 +110,17 @@ const getStatusCli = async (req, resp) => {
 const searchClients = async (req, resp) => {
     try {
         let { limite, offset, filtro } = req.query
-        const filtroCount  = {
-            $or:[
-            {razao: { $regex: filtro, $options: 'i' }},
-            {cnpj: { $regex: filtro, $options: 'i' }}
+        const filtroCount = {
+            $or: [
+                { razao: { $regex: filtro, $options: 'i' } },
+                { cnpj: { $regex: filtro, $options: 'i' } }
             ]
         }
         const totalClients = await clientService.contarClientes(filtroCount)
         const currentUrl = req.baseUrl
-        console.log('TOTAL DE CLIENTES:' + totalClients)
 
-         limite = Number(limite);
-         offset = Number(offset)
+        limite = Number(limite);
+        offset = Number(offset)
 
         if (!limite) {
             limite = 5
@@ -134,15 +131,9 @@ const searchClients = async (req, resp) => {
         }
 
         const next = offset + limite;
-        const nextUrl = next < totalClients ? `${currentUrl}?filtro=${filtro}&limite=${limite}&offset=${next}` : null;
-
+        const nextUrl = next < totalClients ? `${currentUrl}/search?filtro=${filtro}&limite=${limite}&offset=${next}` : null;
         const anterior = offset - limite < 0 ? null : offset - limite;
-        const previousUrl = anterior != null ? `${currentUrl}?filtro=${filtro}&limite=${limite}&offset=${anterior}` : null
-
-
-        console.log(nextUrl)
-        console.log(previousUrl)
-
+        const previousUrl = anterior != null ? `${currentUrl}/search?filtro=${filtro}&limite=${limite}&offset=${anterior}` : null
         const clientes = await clientService.searchClientsService(filtro, limite, offset)
         resp.status(200).json({
             nextUrl, previousUrl, offset, limite,

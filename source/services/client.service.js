@@ -80,7 +80,6 @@ const getStatusClientService = async (cnpj) => {
 const contarClientes = (filtro) =>Client.countDocuments(filtro);
 
 const searchClientsService = async (filtro, limite, offset)=>{
-   
     return await Client.find({
         $or:[
         {razao: { $regex: filtro, $options: 'i' }},
