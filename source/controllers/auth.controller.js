@@ -10,7 +10,7 @@ const login = async (req, resp) => {
         if (!usuario) {
             return resp.status(400).json({ message: 'Usuário ou Senha Incorretos' });
         }
-        const token = jwt.sign({ payload: usuario._id }, process.env.SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ payload: usuario._id }, process.env.SECRET, { expiresIn: '1m' });
         return resp.status(200).json({ message: 'Login Efetuado', token });
     }
     catch (erro) {

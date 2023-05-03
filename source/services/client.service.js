@@ -28,12 +28,14 @@ const getClientByCnpjService = async (cnpj) => {
 const insertClientService = async (cliente) => {
     try {
         const findCli = await Client.findOne({ cnpj: cliente.cnpj })
+        console.log(findCli)
         if (findCli) {
-            throw ({ msg: 'Cliente Já está Cadastrado', status: 400 })
+            throw ({ message: 'Cliente Já esta Cadastrado', status: 400 })
         }
         return await Client.create(cliente)
     }
     catch (error) {
+        console.log(error)
         throw ({ message:error.message || 'Falha no acesso aos dados', status: error.status || 500 })
     }
 }
