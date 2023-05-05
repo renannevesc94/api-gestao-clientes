@@ -11,6 +11,7 @@ route.get('/status/:cnpj', clientControler.getStatusCli);
 route.post('/', validarToken ,clientControler.insertClient);
 route.delete('/:cnpj', validarToken, clientControler.deleteClient);
 route.patch('/:cnpj', validarToken, clientControler.updateStatusClient);
+route.put('/:cnpj', validarToken, clientControler.updateClient);
 
 export default {
     route

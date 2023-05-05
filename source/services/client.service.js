@@ -16,27 +16,25 @@ const getClientByCnpjService = async (cnpj) => {
     try {
         const cliente = await Client.findOne({ cnpj: cnpj })
         if (!cliente) {
-             throw { msg: 'Cliente não localizado', status: 404 }
+            throw { msg: 'Cliente não localizado', status: 404 }
         }
         return cliente
     }
     catch (error) {
-        throw{message: error.msg|| 'Erro de conexão', status:error.status|| 500}
+        throw { message: error.msg || 'Erro de conexão', status: error.status || 500 }
     }
 }
 
 const insertClientService = async (cliente) => {
     try {
         const findCli = await Client.findOne({ cnpj: cliente.cnpj })
-        console.log(findCli)
         if (findCli) {
             throw ({ message: 'Cliente Já esta Cadastrado', status: 400 })
         }
         return await Client.create(cliente)
     }
     catch (error) {
-        console.log(error)
-        throw ({ message:error.message || 'Falha no acesso aos dados', status: error.status || 500 })
+        throw ({ message: error.message || 'Falha no acesso aos dados', status: error.status || 500 })
     }
 }
 
@@ -48,7 +46,7 @@ const deleteClientService = async (cnpj) => {
         }
         return await Client.deleteOne({ cnpj: cnpj })
     } catch (error) {
-        throw ({ message:error.message || 'Falha no acesso aos dados', status: error.status || 500 })
+        throw ({ message: error.message || 'Falha no acesso aos dados', status: error.status || 500 })
     }
 }
 
@@ -61,9 +59,23 @@ const updateStatusClientService = async (cnpj, status) => {
         cliente.situacao = status
         await cliente.save()
     }
-
     catch (error) {
-        throw ({ message:error.message || 'Falha no acesso aos dados', status: error.status || 500 })
+        throw ({ message: error.message || 'Falha no acesso aos dados', status: error.status || 500 })
+    }
+}
+
+const updateClientService = async (cnpj, cliente) => {
+    try {
+        const clientId = await Client.findOne({ cnpj: cnpj })
+        if (!clientId) {
+            throw { msg: 'Cliente não localizado', status: 404 }
+        }
+        console.log(clientId)
+        return Client.findByIdAndUpdate({_id: clientId._id }, cliente)
+       // await cliente.save()
+    }
+    catch (error) {
+        throw ({ message: error.message || 'Falha no acesso aos dados', status: error.status || 500 })
     }
 }
 
@@ -75,19 +87,34 @@ const getStatusClientService = async (cnpj) => {
         }
         return ({ status: cliente.situacao, alerta: cliente.alerta })
     } catch (error) {
-        throw ({ message:error.message || 'Falha no acesso aos dados', status: error.status || 500 })
+        throw ({ message: error.message || 'Falha no acesso aos dados', status: error.status || 500 })
     }
 }
 
-const contarClientes = (filtro) =>Client.countDocuments(filtro);
+const contarClientes = (filtro) => Client.countDocuments(filtro);
 
-const searchClientsService = async (filtro, limite, offset)=>{
+const searchClientsService = async (filtro, limite, offset, status) => {
+    console.log(filtro)
+    if (status != '') {
+        return await Client.find({
+            $and: [
+                { situacao: status },
+                {
+                    $or: [
+                        { razao: { $regex: filtro, $options: 'i' } },
+                        { cnpj: { $regex: filtro, $options: 'i' } }
+                    ]
+                }
+            ]
+        }).skip(offset).limit(limite);
+    }
     return await Client.find({
-        $or:[
-        {razao: { $regex: filtro, $options: 'i' }},
-        {cnpj: { $regex: filtro, $options: 'i' }}
+        $or: [
+            { razao: { $regex: filtro, $options: 'i' } },
+            { cnpj: { $regex: filtro, $options: 'i' } }
         ]
-}).skip(offset).limit(limite);
+    }).skip(offset).limit(limite);
+
 }
 
 export default {
@@ -98,6 +125,7 @@ export default {
     getStatusClientService,
     updateStatusClientService,
     contarClientes,
+    updateClientService,
     searchClientsService
 }
 

@@ -46,7 +46,6 @@ const getClientbyCnpj = async (req, resp) => {
 }
 
 const insertClient = async (req, resp) => {
-
     try {
         const { cnpj, razao, telefone, contato, alerta, situacao } = req.body
         const cliente = {
@@ -95,6 +94,31 @@ const updateStatusClient = async (req, resp) => {
     }
 }
 
+const updateClient = async(req, resp) => {
+    try {
+        const cliCnpj = req.params.cnpj;
+        const { cnpj, razao, telefone, contato, alerta, situacao } = req.body
+        const cliente = {
+            cnpj,
+            razao,
+            telefone,
+            contato,
+            alerta,
+            situacao
+        }
+    
+        if (!cnpj || !razao || !telefone || !contato || !situacao) {
+            return resp.status(401).json({ message: 'Campo obrigatório não informado' })
+        }
+        if (!validaCnpj(cnpj))
+            return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
+        await clientService.updateClientService(cnpj, cliente)
+        return resp.status(201).json({ message: 'Cliente atualizado' })
+    } catch (error) {
+        return resp.status(500).json({ message: error.message })
+    }
+}
+
 const getStatusCli = async (req, resp) => {
     try {
         const cnpj = req.params.cnpj;
@@ -109,8 +133,23 @@ const getStatusCli = async (req, resp) => {
 
 const searchClients = async (req, resp) => {
     try {
-        let { limite, offset, filtro } = req.query
-        const filtroCount = {
+        let { limite, offset, filtro, status } = req.query
+        let filtroCount = {}
+        if (status != '') {
+            filtroCount = {
+                $and: [
+                    { situacao: status },
+                    {
+                        $or: [
+                            { razao: { $regex: filtro, $options: 'i' } },
+                            { cnpj: { $regex: filtro, $options: 'i' } }
+                        ]
+                    }
+                ]
+            }
+        }
+
+        filtroCount = {
             $or: [
                 { razao: { $regex: filtro, $options: 'i' } },
                 { cnpj: { $regex: filtro, $options: 'i' } }
@@ -131,10 +170,10 @@ const searchClients = async (req, resp) => {
         }
 
         const next = offset + limite;
-        const nextUrl = next < totalClients ? `${currentUrl}/search?filtro=${filtro}&limite=${limite}&offset=${next}` : null;
+        const nextUrl = next < totalClients ? `${currentUrl}/search?filtro=${filtro}&status=${status}&limite=${limite}&offset=${next}` : null;
         const anterior = offset - limite < 0 ? null : offset - limite;
-        const previousUrl = anterior != null ? `${currentUrl}/search?filtro=${filtro}&limite=${limite}&offset=${anterior}` : null
-        const clientes = await clientService.searchClientsService(filtro, limite, offset)
+        const previousUrl = anterior != null ? `${currentUrl}/search?filtro=${filtro}&status=${status}&limite=${limite}&offset=${anterior}` : null
+        const clientes = await clientService.searchClientsService(filtro, limite, offset, status)
         resp.status(200).json({
             nextUrl, previousUrl, offset, limite,
             results: clientes
@@ -150,5 +189,7 @@ export default {
     getClientbyCnpj,
     getStatusCli,
     updateStatusClient,
+    updateClient,
     searchClients
 }
+
