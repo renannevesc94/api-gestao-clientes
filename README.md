@@ -1,4 +1,4 @@
-<h1>API CLient Management</h1>
+<h1>API Gestão de Licenças</h1>
 
 <img src="https://img.shields.io/badge/VERSION-1.00-orange"> <img src="https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-brightgreen"> <img src="https://img.shields.io/badge/RELEASE--DATE-MAY--23-orange">
 ##
@@ -6,8 +6,8 @@ Esta **API** tem como objetivo possibilitar o cadastro e gestão de clientes e l
 
 <h2>Funcionalidades do Projeto </h2>
 
-- **`JSON Web Token`:** A API utiliza o JSON Web Token para garantir a segurança das informações, esse token é gerado no login e todas as funções de manipulação de informações precisa desse token de segurança
-- **`Cadastro de Clientes`:** Cadastro de cllientes com validação de campos, inclusive com validação de CNPJ
+- **`JSON Web Token`:** A API utiliza o JSON Web Token para garantir a segurança das informações, esse token é gerado no login e todas as funções de manipulação de informações precisam desse token de segurança
+- **`Cadastro de Clientes`:** Cadastro de clientes com validação de campos, inclusive com validação de CNPJ
 - **`Atualização de Status`:** Método que permite atualizar o *status* do cliente de forma eficaz sem sobrecarregar o tráfego ou o banco de dados enviando um update completo
 - **`Edição das Informações`:** Possibilidade de editar as informações do cliente e a mensagem de alerta que é retornada na consulta de status
 - **`Validação de Login e Geração do JWT`:** As rotas de login além de validar as informções de login também retornam o token que será utilizado para manipular os demais métodos
@@ -30,9 +30,10 @@ Basta fazer o download o projeto e criar um arquivo **.env** contendo as informa
 DB_SENHA = <br>
 DB_LINK = <br>
 SECRET =  <br>
-MONGO_URL = 'mongodb://127.0.0.1/sistema' <br>
+MONGO_URL = 'mongodb://127.0.0.1/sistema' <br></b>
+A variável de ambiente **SECRET** deve conter a chave que será usada na composição do token de segurança
 
-A Nível de testes o projeto pode ser executado na plataforma <b>https://dashboard.render.com/</b> com um banco de dados gratuito da <b>MongoDB Atlas</b>
+A nível de testes o projeto pode ser executado na plataforma <b>https://dashboard.render.com/</b> com um banco de dados gratuito da <b>MongoDB Atlas</b>
 
 
 
