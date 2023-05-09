@@ -11,7 +11,7 @@ const getAllClients = async (req, resp) => {
         offset = Number(offset)
 
         if (!limite) {
-            limite = 5
+            limite = 10
         }
 
         if (!offset) {
@@ -163,7 +163,7 @@ const searchClients = async (req, resp) => {
         offset = Number(offset)
 
         if (!limite) {
-            limite = 5
+            limite = 10
         }
 
         if (!offset) {
