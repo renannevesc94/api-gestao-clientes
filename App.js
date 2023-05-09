@@ -27,6 +27,7 @@ app.use(express.json());
 app.use("/login", authRoute.route);
 app.use("/clientes", clientRoute.route);
 
+//Function que realiza a conexão com o banco de dados
 conectDatabase.dataBase();
 console.log(port)
 app.listen(port);

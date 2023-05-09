@@ -11,7 +11,7 @@ const getAllClients = async (req, resp) => {
         offset = Number(offset)
 
         if (!limite) {
-            limite = 5
+            limite = 10
         }
 
         if (!offset) {
@@ -60,6 +60,8 @@ const insertClient = async (req, resp) => {
         if (!cnpj || !razao || !telefone || !contato || !situacao) {
             return resp.status(401).json({ message: 'Campo obrigatório não informado' })
         }
+        if (!validaCnpj(cnpj))
+            return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
         await clientService.insertClientService(cliente)
         return resp.status(201).json({ message: 'Cliente Cadastrado com sucesso!' })
     } catch (error) {
@@ -96,7 +98,6 @@ const updateStatusClient = async (req, resp) => {
 
 const updateClient = async(req, resp) => {
     try {
-        const cliCnpj = req.params.cnpj;
         const { cnpj, razao, telefone, contato, alerta, situacao } = req.body
         const cliente = {
             cnpj,
@@ -162,7 +163,7 @@ const searchClients = async (req, resp) => {
         offset = Number(offset)
 
         if (!limite) {
-            limite = 5
+            limite = 10
         }
 
         if (!offset) {
