@@ -94,8 +94,7 @@ const getStatusClientService = async (cnpj) => {
 const contarClientes = (filtro) => Client.countDocuments(filtro);
 
 const searchClientsService = async (filtro, limite, offset, status) => {
-    console.log(filtro)
-    if (status != '') {
+    if (status != '' && status != undefined ) {
         return await Client.find({
             $and: [
                 { situacao: status },

@@ -1,0 +1,388 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Gestão de Licenças",
+    "description": "Esta documentação contem a especificação dos end-points da API além de possibilitar testes, esta API tem como objetivo fornecer um cadastro de clientes e controle de licenças de uso que possam ser consumidos por outros softwares. Existe um front-end pronto para consumo da API que pode ser baixado [neste GitHub](https://github.com/renannevesc94/frontend_gestao_clientes)",
+    "contact": {
+      "email": "renan.epd@gmail.com"
+    },
+    "version": "1.0.0-Beta"
+  },
+  "servers": [
+    {
+      "url": "http://192.168.1.64:3000",
+      "description": "Local Server"
+    },
+    {
+      "url":"https://api-gestao-clientes.onrender.com",
+      "description": "Render server for homologation"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Efetuar Login",
+        "description": "Rota responsável por efetuar o login e obter o token para validar as demais operações",
+        "tags": ["Login"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              },
+              "examples": {
+                "Post": {
+                  "value": {
+                    "userName": "usuario@gmail.com",
+                    "senhaUser": "12345678a"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "aplication/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Usuário ou senha incorretos"
+          },
+          "500": {
+            "description": "Falha na requisição"
+          }
+        }
+      }
+    },
+    "/clientes": {
+      "post": {
+        "summary": "Inserir Novo Cliente",
+        "description": "Rota responsável por inserir novos clientes no banco de dados, fique atento aos campos obrigatórios e não se esqueça de informar o token de segurança ",
+        "tags": ["Clientes"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clientes"
+              },
+              "examples": {
+                "Post": {
+                  "value": {
+                    "cnpj": "23568107000136",
+                    "razao": "Empresa K Ltda",
+                    "telefone": "(21)1234-5678",
+                    "contato": "João",
+                    "alerta": "",
+                    "situacao": "Liberado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Campo obrigatório não informado ou CNPJ incorreto"
+          },
+          "401": {
+            "description": "Acesso não autorizado"
+          }
+        }
+      },
+      "get": {
+        "summary": "Buscar Todos os Clientes",
+        "description": "Rota responsável por buscar todos os clientes no banco de dados, essa rota pode receber os parametros de limite e offset para realizar a paginação da busca e evitar sobrecarga, além dos dados dos clientes a consulta também retorna: nextUrl previousUrl que contem as URLs de busca já parametrizadas para PRÓXIMA PÁGINA e PÁGINA ANTERIOR com base nos parametros de LIMITE E OFFSET passados na primeira consulta",
+        "tags": ["Clientes"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limitParam"
+          },
+          {
+            "$ref": "#/components/parameters/offsetParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Acesso não autorizado"
+          }
+        }
+      }
+    },
+    "/clientes/search": {
+      "get": {
+        "summary": "Filtrar Clientes",
+        "description": "Rota responsável por buscar todos os clientes no banco de dados, essa rota pode receber os parametros de limite e offset para realizar a paginação da busca e evitar sobrecarga, além dos dados dos clientes a consulta também retorna: nextUrl previousUrl que contem as URLs de busca já parametrizadas para PRÓXIMA PÁGINA e PÁGINA ANTERIOR com base nos parametros de LIMITE E OFFSET passados na primeira consulta",
+        "tags": ["Clientes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "$ref": "#/components/parameters/limitParam" },
+          { "$ref": "#/components/parameters/offsetParam" },
+          { "$ref": "#/components/parameters/filterParam" },
+          { "$ref": "#/components/parameters/statusParam" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Acesso não autorizado"
+          },
+          "500": {
+            "description": "Falha na requisição"
+          }
+        }
+      }
+    },
+    "/clientes/status/{cnpj}": {
+      "get": {
+        "summary": "Obter STATUS do cliente com base no CNPJ",
+        "description": "Rota responsável por obter o *status* do cliente juntamente com a mensagem de alerta que foi cadastrada",
+        "tags": ["Clientes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/cnpjParam" }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Acesso não autorizado"
+          }
+        }
+      }
+    },
+    "/clientes/{cnpj}": {
+      "patch": {
+        "summary": "Atualizar o Status do Cliente",
+        "description": "Rota responsável por atualizar apenas o status do cliente sem fazer o update completo das informações poupando recursos",
+        "tags": ["Clientes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/cnpjParam" }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              },
+              "example": {
+                "status": "Liberado"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Cliente não localizado na base de dados"
+          },
+          "401": {
+            "description": "Acesso não autorizado"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar as informações do cliente",
+        "description": "Rota responsável por editar as informações do cliente, esta rota faz um update completo dos dados do cliente por esse motivo deve ser utilizada apenas quando de fato for necessário, para atualização de Status utilize a rota específica para isso",
+        "tags": ["Clientes"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [{ "$ref": "#/components/parameters/cnpjParam" }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clientes"
+              },
+              "examples": {
+                "Put": {
+                  "value": {
+                    "razao": "Empresa K Ltda",
+                    "telefone": "(21)1234-5678",
+                    "contato": "João",
+                    "alerta": "Uma mensagem para o usuário",
+                    "situacao": "Liberado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Campo obrigatório não informado ou CNPJ incorreto"
+          },
+          "401": {
+            "description": "Acesso não autorizado"
+          },
+          "404": {
+            "description": "Cliente não localizado na base de dados"
+          }
+        }
+      }
+    },
+    "delete": {
+      "summary": "Excluir Cliente",
+      "description": "Rota responsável por buscar as informações de determinado cliente com base no CNPJ que deve ser enviado como parametro na URI de consulta",
+      "tags": ["Clientes"],
+      "security": [{ "bearerAuth": [] }],
+      "parameters": [{ "$ref": "#/components/parameters/cnpjParam" }],
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "description": "CNPJ incorreto"
+        },
+        "401": {
+          "description": "Acesso não autorizado"
+        }
+      }
+    },
+    "get": {
+      "summary": "Buscar dados do cliente com path CNPJ na URI",
+      "description": "Rota responsável por buscar as informações de determinado cliente com base no CNPJ que deve ser enviado como parametro na URI de consulta",
+      "tags": ["Clientes"],
+      "security": [{ "bearerAuth": [] }],
+      "parameters": [{ "$ref": "#/components/parameters/cnpjParam" }],
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "description": "CNPJ incorreto ou não cadastrado"
+        },
+        "401": {
+          "description": "Acesso não autorizado"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Users": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string"
+          },
+          "senhaUser": {
+            "type": "string"
+          }
+        }
+      },
+      "Clientes": {
+        "type": "object",
+        "properties": {
+          "cnpj": {
+            "type": "string",
+            "required": true
+          },
+          "razao": {
+            "type": "string",
+            "required": true
+          },
+          "telefone": {
+            "type": "string"
+          },
+          "contato": {
+            "type": "string"
+          },
+          "alerta": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+    },
+    "parameters": {
+      "limitParam": {
+        "name": "limite",
+        "in": "query",
+        "description": "limite para paginação da consulta, se não for passado a API assume 10 como default",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "offsetParam": {
+        "name": "offset",
+        "in": "query",
+        "description": "Parametro para definir o ponto de partida da consulta",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "filterParam": {
+        "name": "filtro",
+        "in": "query",
+        "description": "Parametro para definir um filtro por CNPJ ou RAZAO do cliente",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "statusParam": {
+        "name": "status",
+        "in": "query",
+        "description": "Parametro usado para filtrar a situação do cliente pode receber: *Bloqueado*, *Liberado*",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "cnpjParam": {
+        "name": "cnpj",
+        "in": "path",
+        "description": "Parametro para localizar cliente específico com base no CNPJ que é unique key no BD",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
+
+

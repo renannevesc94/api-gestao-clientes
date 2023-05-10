@@ -58,7 +58,7 @@ const insertClient = async (req, resp) => {
         }
 
         if (!cnpj || !razao || !telefone || !contato || !situacao) {
-            return resp.status(401).json({ message: 'Campo obrigatório não informado' })
+            return resp.status(400).json({ message: 'Campo obrigatório não informado' })
         }
         if (!validaCnpj(cnpj))
             return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
@@ -98,9 +98,9 @@ const updateStatusClient = async (req, resp) => {
 
 const updateClient = async(req, resp) => {
     try {
-        const { cnpj, razao, telefone, contato, alerta, situacao } = req.body
+        const cnpj = req.params.cnpj
+        const { razao, telefone, contato, alerta, situacao } = req.body
         const cliente = {
-            cnpj,
             razao,
             telefone,
             contato,
@@ -108,11 +108,9 @@ const updateClient = async(req, resp) => {
             situacao
         }
     
-        if (!cnpj || !razao || !telefone || !contato || !situacao) {
-            return resp.status(401).json({ message: 'Campo obrigatório não informado' })
+        if (!razao || !telefone || !contato || !situacao) {
+            return resp.status(400).json({ message: 'Campo obrigatório não informado' })
         }
-        if (!validaCnpj(cnpj))
-            return resp.status(400).json({ message: 'CNPJ informado está incorreto' })
         await clientService.updateClientService(cnpj, cliente)
         return resp.status(201).json({ message: 'Cliente atualizado' })
     } catch (error) {
@@ -158,7 +156,7 @@ const searchClients = async (req, resp) => {
         }
         const totalClients = await clientService.contarClientes(filtroCount)
         const currentUrl = req.baseUrl
-
+       
         limite = Number(limite);
         offset = Number(offset)
 
