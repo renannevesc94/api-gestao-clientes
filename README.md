@@ -33,7 +33,15 @@ SECRET =  <br>
 MONGO_URL = 'mongodb://127.0.0.1/sistema' <br></b>
 A variável de ambiente **SECRET** deve conter a chave que será usada na composição do token de segurança
 
-A nível de testes o projeto pode ser executado na plataforma <b>https://dashboard.render.com/</b> com um banco de dados gratuito da <b>MongoDB Atlas</b>
+A nível de testes o projeto pode ser executado na plataforma <b>https://dashboard.render.com/</b> com um banco de dados gratuito da <b>MongoDB Atlas</b><br>
+##
+<h2>Utilidades</h2>
+Existe um front-end feito com <b>HTML, CSS, JAVASCRIPT, BULMA</b> Q os recursos dessa API, ele pode ser baixado em:
+<b>https://github.com/renannevesc94/frontend_gestao_clientes</b> 
+##
+
+<h4>Documentação</h4>
+  A documentação pode ser acessada em: <b>https://api-gestao-clientes.onrender.com/docs</b>
 
 
 
