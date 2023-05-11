@@ -22,7 +22,9 @@ Esta **API** tem como objetivo possibilitar o cadastro e gestão de clientes e l
   <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" style="display: inline-block;">
   <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" style="display: inline-block;">
   <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" style="display: inline-block;">
+  <img src="https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white"/>
 </div>
+
 
 <h2>Instruções para Executar o Projeto</h2>
 Basta fazer o download o projeto e criar um arquivo **.env** contendo as informações de acesso ao banco de dados da seguinte maneira:<br>
