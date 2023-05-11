@@ -42,6 +42,8 @@ Existe um front-end feito com <b>HTML, CSS, JAVASCRIPT, BULMA</b> Q os recursos 
 
 <h4>Documentação</h4>
   A documentação pode ser acessada em: <b>https://api-gestao-clientes.onrender.com/docs</b>
+  
+![print_api](https://github.com/renannevesc94/api-gestao-clientes/assets/19363079/38d3da23-794e-4840-b0b2-fa5557e72a96)
 
 
 
