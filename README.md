@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/VERSION-1.00-orange"> <img src="https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-brightgreen"> <img src="https://img.shields.io/badge/RELEASE--DATE-MAY--23-orange">
 ##
-Esta **API** tem como objetivo possibilitar o cadastro e gestão de clientes e licenças de uso de software de forma simplificada, fornecendo rotas e métodos que possibilitam a comunicação com praticamente qualquer linguegem de programação, com isso clientes que utilizam linguagens mais antigas podem gerenciar e controlar o acesso a seus sistemas de forma 100% web.
+Esta **API** tem como objetivo possibilitar o cadastro e gestão de clientes e licenças de uso de software de forma simplificada, fornecendo rotas e métodos que possibilitem a comunicação com praticamente qualquer linguagem de programação, com isso clientes que utilizam linguagens mais antigas podem gerenciar e controlar o acesso a seus sistemas de forma 100% web.
 
 <h2>Funcionalidades do Projeto </h2>
 
